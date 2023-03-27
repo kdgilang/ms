@@ -107,7 +107,8 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "./src/app.ts"
+    "./src/app.ts",
+    "./src/grpc.ts"
   ],
   "exclude": [
     "node_modules/*",

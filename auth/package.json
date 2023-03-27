@@ -2,7 +2,7 @@
   "name": "ms-auth",
   "version": "1.0.0",
   "description": "simple micro services ",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/app.js",
