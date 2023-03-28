@@ -19,7 +19,7 @@ const userSchema = new Schema({
       validator: (v: string) => {
         return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v)
       },
-      message: '{VALUE} is not valid email address, Please input valid email address.'
+      message: '{VALUE} is not a valid email address.'
     }
   },
   password: {
