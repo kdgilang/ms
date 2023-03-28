@@ -1,13 +1,18 @@
 import { Request, Response } from 'express'
-import clientUser from '../providers/client-user'
+import userProvider from '../providers/client-user'
 
-export default (req: Request, res: Response) => {
-    res.send('healthy')
-    // clientUser.getAll(null, (err: any, data: any) => {
-    //     if (!err) {
-    //         res.send({
-    //             results: data.customers
-    //         });
-    //     }
-    // })
+export default async (req: Request, res: Response) => {
+    const users = await new Promise((res, rej) => {
+        userProvider.getAll(null, (err: any, data: any) => {
+            if (!err) {
+                res({
+                    results: data.customers
+                })
+            }
+
+            rej(err)
+        })
+    })
+
+    res.send(users)
 }
