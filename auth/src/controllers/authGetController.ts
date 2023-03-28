@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import userProvider from '../providers/client-user'
+import userProvider from '../providers/userProvider'
 
 export default async (req: Request, res: Response) => {
     const users = await new Promise((res, rej) => {
