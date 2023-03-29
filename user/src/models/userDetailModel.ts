@@ -1,4 +1,4 @@
-export interface IUserDetail {
+export interface IUserDetailModel {
     address: string
     phoneNumber: string
     gender: EGender
@@ -6,7 +6,7 @@ export interface IUserDetail {
     religion: EReligion
 }
 
-export class UserDetail implements IUserDetail {
+export class UserDetailModel implements IUserDetailModel {
     address: string
     phoneNumber: string
     gender: EGender

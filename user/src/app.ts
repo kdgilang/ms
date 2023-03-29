@@ -10,16 +10,8 @@ const DB_HOST: string = process.env.DB_HOST || ''
 
 mongoose.connect(DB_HOST)
 
-import User from './schemas/userSchema'
+import './schemas/userSchema'
 import './schemas/userDetailSchema'
-
-const newUSer = new User({
-  firstName: 'blabla',
-  lastName: 'blublu',
-  email: 'blbaba@blaba.com',
-  password: 'blbaba',
-})
-newUSer.save()
 
 app.use(express.json())
 

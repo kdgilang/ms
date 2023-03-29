@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-export interface IUser {
+export interface IUserModel {
     firstName: string
     lastName: string
     email: string
@@ -10,7 +10,7 @@ export interface IUser {
     userDetail: Types.ObjectId
 }
 
-export class User implements IUser {
+export class UserModel implements IUserModel {
     firstName: string
     lastName: string
     email: string

@@ -13,6 +13,24 @@ export default {
   //   // Sanitizers can go here as well
   //   toInt: true,
   // },
+  firstName: {
+    rtrim: {
+      // Options as an array
+      options: [' -'],
+    },
+  },
+  lastName: {
+    rtrim: {
+      // Options as an array
+      options: [' -'],
+    },
+  },
+  email: {
+    errorMessage: EMAIL_ERROR_MESSAGE,
+    isEmail: {
+      bail: true,
+    },
+  },
   password: {
     custom: {
       errorMessage: PASSWORD_ERROR_MESSAGE,
@@ -22,23 +40,6 @@ export default {
         }
         return false
       },
-    },
-  },
-  // firstName: {
-  //   isUppercase: {
-  //     // To negate a validator
-  //     negated: true,
-  //   },
-  //   rtrim: {
-  //     // Options as an array
-  //     options: [' -'],
-  //   },
-  // },
-  // Support bail functionality in schemas
-  email: {
-    errorMessage: EMAIL_ERROR_MESSAGE,
-    isEmail: {
-      bail: true,
     },
   },
 }

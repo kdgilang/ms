@@ -1,7 +1,7 @@
-import { Schema, model, Types } from 'mongoose'
-import { IUserDetail, EReligion, EGender } from '../models/userDetailModel'
+import { Schema, model } from 'mongoose'
+import { EReligion, EGender, IUserDetailModel } from '../models/userDetailModel'
 
-const userDetailSchema = new Schema<IUserDetail>({
+const userDetailSchema = new Schema<IUserDetailModel>({
   address: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   status: { type: String },
@@ -9,6 +9,4 @@ const userDetailSchema = new Schema<IUserDetail>({
   religion: { type: String, enum: EReligion}
 })
 
-const UserDetail = model<IUserDetail>('UserDetail', userDetailSchema)
-
-export default UserDetail
+export default model<IUserDetailModel>('UserDetail', userDetailSchema)

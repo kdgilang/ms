@@ -1,5 +1,5 @@
-import mongoose, { Schema, model, Types } from 'mongoose'
-import { IUser } from '../models/userModel'
+import { Schema, model, Types } from 'mongoose'
+import { IUserModel } from '../models/userModel'
 import UserDetail from './userDetailSchema'
 
 const userSchema = new Schema({
@@ -40,6 +40,4 @@ const userSchema = new Schema({
 
 userSchema.path('userDetail').ref(UserDetail)
 
-const User = model<IUser>('User', userSchema)
-
-export default User
+export default model<IUserModel>('User', userSchema)
