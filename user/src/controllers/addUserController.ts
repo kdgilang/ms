@@ -12,8 +12,15 @@ export default async (req: Request, res: Response) => {
   }
 
   const userReq = req.body as IUserModel;
+  
+  try {
+    const {
+      password,
+      ...userRes
+    } = await addUserRepository(userReq)
 
-  const newUser = await addUserRepository(userReq) as AddUserResponseType
-
-  res.json(newUser)
+    res.json(userRes as AddUserResponseType)
+  } catch (err) {
+    res.status(400).json(err)
+  }
 }

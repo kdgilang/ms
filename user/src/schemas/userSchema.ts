@@ -1,26 +1,28 @@
 import { Schema, model, Types } from 'mongoose'
 import { IUserModel } from '../models/userModel'
 import UserDetail from './userDetailSchema'
+import { 
+  PASSWORD_ERROR_MESSAGE,
+  EMAIL_ERROR_MESSAGE,
+  PASSWORD_REGEX
+} from '../consts/userConst'
+
+const emailRegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+export const isEmail = {
+  validator: (email: string): boolean => emailRegExp.test(email),
+  message: EMAIL_ERROR_MESSAGE,
+}
 
 const userSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: {
     type: String,
-    unique: {
-      args: true,
-      message: 'Email must be unique.',
-    },
-    required: {
-      arg: true,
-      message: 'Email is required.',
-    },
-    validate: {
-      validator: (v: string) => {
-        return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v)
-      },
-      message: '{VALUE} is not a valid email address.'
-    }
+    required: [true, 'Email is required.'],
+    unique: [true, 'Email is already in use.'],
+    lowercase: [true, 'Email require lowercase'],
+    validate: isEmail,
   },
   password: {
     type: String,
@@ -28,9 +30,9 @@ const userSchema = new Schema({
 		required: [true, 'Password is required.'],
 		validate: {
 			validator: (v: string) => {
-				return /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/.test(v);
+				return PASSWORD_REGEX.test(v);
 			},
-			message: 'Your password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number.'
+			message: PASSWORD_ERROR_MESSAGE
 		}
   },
   token: String,

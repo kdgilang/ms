@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
 
 export interface IUserModel {
+    id: Types.ObjectId
     firstName: string
     lastName: string
     email: string
@@ -11,6 +12,7 @@ export interface IUserModel {
 }
 
 export class UserModel implements IUserModel {
+    id: Types.ObjectId
     firstName: string
     lastName: string
     email: string
@@ -19,6 +21,7 @@ export class UserModel implements IUserModel {
     token?: string
     userDetail: Types.ObjectId
     constructor() {
+        this.id = new Types.ObjectId()
         this.firstName = ''
         this.lastName = ''
         this.email = ''

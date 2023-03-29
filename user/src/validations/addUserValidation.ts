@@ -1,7 +1,8 @@
 import { 
   PASSWORD_ERROR_MESSAGE,
-  EMAIL_ERROR_MESSAGE
-} from '../consts/authConst'
+  EMAIL_ERROR_MESSAGE,
+  PASSWORD_REGEX
+} from '../consts/userConst'
 
 export default {
   // id: {
@@ -35,7 +36,7 @@ export default {
     custom: {
       errorMessage: PASSWORD_ERROR_MESSAGE,
       options: (value: string) => {
-        if (value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
+        if (value.match(PASSWORD_REGEX)) {
           return true
         }
         return false
