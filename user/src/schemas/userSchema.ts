@@ -1,16 +1,17 @@
 import { Schema, model, Types } from 'mongoose'
-import { IUserModel } from '../models/userModel'
+import bcrypt from 'bcrypt'
+import { IUserModel, UserModel } from '../models/userModel'
 import UserDetail from './userDetailSchema'
 import { 
   PASSWORD_ERROR_MESSAGE,
   EMAIL_ERROR_MESSAGE,
-  PASSWORD_REGEX
+  EMAIL_REGEX,
+  PASSWORD_REGEX,
+  SALT_WORK_FACTOR
 } from '../consts/userConst'
 
-const emailRegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
 export const isEmail = {
-  validator: (email: string): boolean => emailRegExp.test(email),
+  validator: (email: string): boolean => EMAIL_REGEX.test(email),
   message: EMAIL_ERROR_MESSAGE,
 }
 
@@ -30,7 +31,7 @@ const userSchema = new Schema({
 		required: [true, 'Password is required.'],
 		validate: {
 			validator: (v: string) => {
-				return PASSWORD_REGEX.test(v);
+				return PASSWORD_REGEX.test(v)
 			},
 			message: PASSWORD_ERROR_MESSAGE
 		}
@@ -41,5 +42,25 @@ const userSchema = new Schema({
 })
 
 userSchema.path('userDetail').ref(UserDetail)
+
+userSchema.pre('save', async function (next: any) {
+
+  // only hash the password if it has been modified (or is new)
+  if (!this.isModified('password')) return next()
+
+  try {
+    // generate a salt
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    // store hash password
+    this.password = await bcrypt.hash(this.password, salt)
+    return next()
+  } catch (err) {
+    return next(err)
+  }
+})
+
+userSchema.methods.comparePassword = async function (candidatePassword: string)  {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 export default model<IUserModel>('User', userSchema)

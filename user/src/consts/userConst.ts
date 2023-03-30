@@ -5,3 +5,6 @@ export const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*
 // ERROR MESSAGES
 export const EMAIL_ERROR_MESSAGE = 'Invalid email address.'
 export const PASSWORD_ERROR_MESSAGE = 'Password should be combination of one uppercase , one lower case, one special char, one digit and min 8, max 20 char long.'
+
+// SALT
+export const SALT_WORK_FACTOR = Number(process.env.SALT_WORK_FACTOR) || 102928
