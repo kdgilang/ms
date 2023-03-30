@@ -1,7 +1,7 @@
 import { Request, Response, } from 'express'
 import { validationResult } from 'express-validator'
-import { IUserModel } from '../models/userModel';
-import addUserRepository from '../repositories/addUserRepository'
+import { ValidateUserReqType } from '../types/validateUserType'
+import validateUserRepository from '../repositories/validateUserRepository'
 
 export default async (req: Request, res: Response) => {
   const errors = validationResult(req)
@@ -10,16 +10,14 @@ export default async (req: Request, res: Response) => {
     return res.status(400).json({ ...errors })
   }
 
-  const userReq = req.body as IUserModel;
+  const userReq = req.body as ValidateUserReqType;
   
   try {
-    const {
-      password,
-      ...userRes
-    } = await addUserRepository(userReq)
+    const isValid = await validateUserRepository(userReq)
 
-    res.json(userRes)
+    res.json(isValid)
   } catch (err) {
+    console.log(err)
     res.status(400).json(err)
   }
 }

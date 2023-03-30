@@ -59,8 +59,14 @@ userSchema.pre('save', async function (next: any) {
   }
 })
 
-userSchema.methods.comparePassword = async function (candidatePassword: string)  {
-  return bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = async function (password: string)  {
+  return bcrypt.compare(password, this.password);
 };
 
-export default model<IUserModel>('User', userSchema)
+type ComparePasswordType = (password: string) => boolean
+
+interface IUserSchema extends IUserModel {
+  comparePassword: ComparePasswordType
+}
+
+export default model<IUserSchema>('User', userSchema)

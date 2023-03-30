@@ -1,12 +1,11 @@
 import express from 'express'
 import mongoose from 'mongoose'
 require('dotenv').config()
-import homeRouter from './routers/authRouter'
+import baseRouter from './routers/userRouter'
 import corsMiddleware from './middlewares/corsMiddleware'
+import { DB_HOST, PORT } from './consts/userConst'
 
 const app = express()
-const port = process.env.PORT || 3000
-const DB_HOST: string = process.env.DB_HOST || ''
 
 mongoose.connect(DB_HOST)
 
@@ -17,14 +16,19 @@ app.use(express.json())
 
 app.use(corsMiddleware)
 
-app.use(homeRouter)
+app.use((_, res, next) => {
+  res.setTimeout(10000)
+  next()
+})
+
+app.use(baseRouter)
 
 app.use((_,res) => {
   res.status(404).send('not found')
 })
 
-app.listen(port, () => {
-  console.log(`app listening on port ${port}`)
+app.listen(PORT, () => {
+  console.log(`app listening on port ${PORT}`)
 })
 
 export default app

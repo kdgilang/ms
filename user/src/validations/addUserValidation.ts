@@ -1,8 +1,4 @@
-import { 
-  PASSWORD_ERROR_MESSAGE,
-  EMAIL_ERROR_MESSAGE,
-  PASSWORD_REGEX
-} from '../consts/userConst'
+import baseUserValidation from './baseUserValidation'
 
 export default {
   // id: {
@@ -14,6 +10,7 @@ export default {
   //   // Sanitizers can go here as well
   //   toInt: true,
   // },
+  ...baseUserValidation,
   firstName: {
     rtrim: {
       // Options as an array
@@ -24,23 +21,6 @@ export default {
     rtrim: {
       // Options as an array
       options: [' -'],
-    },
-  },
-  email: {
-    errorMessage: EMAIL_ERROR_MESSAGE,
-    isEmail: {
-      bail: true,
-    },
-  },
-  password: {
-    custom: {
-      errorMessage: PASSWORD_ERROR_MESSAGE,
-      options: (value: string) => {
-        if (value.match(PASSWORD_REGEX)) {
-          return true
-        }
-        return false
-      },
     },
   },
 }
