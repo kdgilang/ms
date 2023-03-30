@@ -10,3 +10,4 @@ export const PASSWORD_ERROR_MESSAGE = 'Password should be combination of one upp
 export const SALT_WORK_FACTOR = Number(process.env.SALT_WORK_FACTOR) || 102928
 export const PORT = process.env.PORT || 3000
 export const DB_HOST: string = process.env.DB_HOST || ''
+export const GRPC_HOST = process.env.GRPC_HOST || ''

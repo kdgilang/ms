@@ -1,6 +1,6 @@
 import { Schema, model, Types } from 'mongoose'
 import bcrypt from 'bcrypt'
-import { IUserModel, UserModel } from '../models/userModel'
+import { EStatus, IUserModel, UserModel } from '../models/userModel'
 import UserDetail from './userDetailSchema'
 import { 
   PASSWORD_ERROR_MESSAGE,
@@ -36,6 +36,10 @@ const userSchema = new Schema({
 			message: PASSWORD_ERROR_MESSAGE
 		}
   },
+  status: {
+    type: String,
+    enum: EStatus
+  },
   token: String,
   avatar: String,
   userDetail: Types.ObjectId
@@ -55,6 +59,7 @@ userSchema.pre('save', async function (next: any) {
     this.password = await bcrypt.hash(this.password, salt)
     return next()
   } catch (err) {
+    console.log(err)
     return next(err)
   }
 })

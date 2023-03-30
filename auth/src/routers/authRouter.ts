@@ -6,8 +6,8 @@ import authValidation from '../validations/authValidation'
 
 const router = Router()
 
-router.get('/auth', authGetController)
+router.get('/', authGetController)
 
-router.post('/auth', checkSchema(authValidation), authPostController)
+router.post('/', checkSchema(authValidation), authPostController)
 
 export default router

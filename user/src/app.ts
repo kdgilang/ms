@@ -4,6 +4,7 @@ require('dotenv').config()
 import baseRouter from './routers/userRouter'
 import corsMiddleware from './middlewares/corsMiddleware'
 import { DB_HOST, PORT } from './consts/userConst'
+import bodyParser from 'body-parser'
 
 const app = express()
 
@@ -14,10 +15,12 @@ import './schemas/userDetailSchema'
 
 app.use(express.json())
 
+app.use(bodyParser.urlencoded({ extended: false }))
+
 app.use(corsMiddleware)
 
 app.use((_, res, next) => {
-  res.setTimeout(10000)
+  res.setTimeout(15000)
   next()
 })
 

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/app.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon dist/app.js\" \"nodemon grpc.js\"",
+    "start-grpc": "node dist/grpc.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon dist/app.js\" \"nodemon dist/grpc.js\"",
     "test": "mocha ./tests/index.js --timeout 10000 --reporter mochawesome --reporter-options reportDir=tests/result, reportFilename=result"
   },
   "author": "kdgilang",

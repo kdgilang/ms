@@ -4,6 +4,7 @@ const PROTO_PATH = "./user.proto";
 require('dotenv').config();
 const grpc = require("grpc");
 const protoLoader = require("@grpc/proto-loader");
+const validateUserRepository = require('./dist/repositories/validateUserRepository')
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
     keepCase: true,
@@ -13,10 +14,10 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 });
 
 const GRPC_HOST = process.env.GRPC_HOST;
-const customersProto = grpc.loadPackageDefinition(packageDefinition);
+const usersProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server();
 
-const customers = [
+const users = [
     {
         id: "a68b823c-7ca6-44bc-b721-fb4d5312cafc",
         name: "John Bolton",
@@ -31,14 +32,14 @@ const customers = [
     }
 ];
 
-server.addService(customersProto.CustomerService.service, {
+server.addService(usersProto.UserService.service, {
     getAll: (_, callback) => {
-        callback(null, { customers });
+        callback(null, { users });
     },
     get: (call, callback) => {
-        let customer = customers.find(n => n.id == call.request.id);
-        if (customer) {
-            callback(null, customer);
+        let user = users.find(n => n.id == call.request.id);
+        if (user) {
+            callback(null, user);
         }
         else {
             callback({
@@ -48,18 +49,18 @@ server.addService(customersProto.CustomerService.service, {
         }
     },
     insert: (call, callback) => {
-        let customer = call.request;
-        customer.id = "";
-        customers.push(customer);
-        callback(null, customer);
+        let user = call.request;
+        user.id = "";
+        users.push(user);
+        callback(null, user);
     },
     update: (call, callback) => {
-        let existingCustomer = customers.find(n => n.id == call.request.id);
-        if (existingCustomer) {
-            existingCustomer.name = call.request.name;
-            existingCustomer.age = call.request.age;
-            existingCustomer.address = call.request.address;
-            callback(null, existingCustomer);
+        let existinguser = users.find(n => n.id == call.request.id);
+        if (existinguser) {
+            existinguser.name = call.request.name;
+            existinguser.age = call.request.age;
+            existinguser.address = call.request.address;
+            callback(null, existinguser);
         }
         else {
             callback({
@@ -69,9 +70,9 @@ server.addService(customersProto.CustomerService.service, {
         }
     },
     remove: (call, callback) => {
-        let existingCustomerIndex = customers.findIndex(n => n.id == call.request.id);
-        if (existingCustomerIndex != -1) {
-            customers.splice(existingCustomerIndex, 1);
+        let existinguserIndex = users.findIndex(n => n.id == call.request.id);
+        if (existinguserIndex != -1) {
+            users.splice(existinguserIndex, 1);
             callback(null, {});
         }
         else {
@@ -80,7 +81,22 @@ server.addService(customersProto.CustomerService.service, {
                 details: "Not found"
             });
         }
-    }
+    },
+    validate: async (call, callback) => {
+        const isValid = await validateUserRepository(call.request);
+        if (isValid) {
+            callback({ 
+                code: grpc.status.OK,
+                details: "Success"
+            });
+        }
+        else {
+            callback({
+                code: grpc.status.NOT_FOUND,
+                details: "Not found"
+            });
+        }
+    },
 });
 
 server.bind(GRPC_HOST, grpc.ServerCredentials.createInsecure());

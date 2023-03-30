@@ -11,8 +11,8 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
     arrays: true
 })
 
-const CustomerService = grpc.loadPackageDefinition(packageDefinition).CustomerService;
-const client = new CustomerService(
+const UserService = grpc.loadPackageDefinition(packageDefinition).UserService;
+const client = new UserService(
     "localhost:30043",
     grpc.credentials.createInsecure()
 )
