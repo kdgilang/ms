@@ -1,7 +1,7 @@
 import { Schema, model, Types } from 'mongoose'
 import bcrypt from 'bcrypt'
 import { EStatus, IUserModel, UserModel } from '../models/userModel'
-import UserDetail from './userDetailSchema'
+import UserDetail from './userDetailEntity'
 import { 
   PASSWORD_ERROR_MESSAGE,
   EMAIL_ERROR_MESSAGE,
@@ -15,7 +15,7 @@ export const isEmail = {
   message: EMAIL_ERROR_MESSAGE,
 }
 
-const userSchema = new Schema({
+const UserEntity = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: {
@@ -45,9 +45,9 @@ const userSchema = new Schema({
   userDetail: Types.ObjectId
 })
 
-userSchema.path('userDetail').ref(UserDetail)
+UserEntity.path('userDetail').ref(UserDetail)
 
-userSchema.pre('save', async function (next: any) {
+UserEntity.pre('save', async function (next: any) {
 
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('password')) return next()
@@ -64,14 +64,14 @@ userSchema.pre('save', async function (next: any) {
   }
 })
 
-userSchema.methods.comparePassword = async function (password: string)  {
+UserEntity.methods.comparePassword = async function (password: string)  {
   return bcrypt.compare(password, this.password);
 };
 
 type ComparePasswordType = (password: string) => boolean
 
-interface IUserSchema extends IUserModel {
+interface IUserEntity extends IUserModel {
   comparePassword: ComparePasswordType
 }
 
-export default model<IUserSchema>('User', userSchema)
+export default model<IUserEntity>('User', UserEntity)

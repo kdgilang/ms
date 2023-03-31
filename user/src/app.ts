@@ -10,8 +10,8 @@ const app = express()
 
 mongoose.connect(DB_HOST)
 
-import './schemas/userSchema'
-import './schemas/userDetailSchema'
+import './entities/userEntity'
+import './entities/userDetailEntity'
 
 app.use(express.json())
 

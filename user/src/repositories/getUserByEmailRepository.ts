@@ -1,9 +1,9 @@
 import { IUserModel, UserModel } from '../models/userModel'
-import UserSchema from '../schemas/userSchema'
+import UserEntity from '../entities/userEntity'
 
 export default async (email: string): Promise<IUserModel> => {
   try {
-    return UserSchema.findOne({ email }).exec() as Promise<IUserModel>
+    return UserEntity.findOne({ email }).exec() as Promise<IUserModel>
   } catch (err) {
     console.log(err)
     throw err

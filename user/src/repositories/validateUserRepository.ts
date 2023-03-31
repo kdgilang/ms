@@ -1,5 +1,5 @@
 import { ValidateUserReqType } from '../types/validateUserType'
-import userSchema from '../schemas/userSchema'
+import UserEntity from '../entities/userEntity'
 import { EStatus } from '../models/userModel'
 
 export default async (params: ValidateUserReqType): Promise<boolean> => {
@@ -7,7 +7,7 @@ export default async (params: ValidateUserReqType): Promise<boolean> => {
     if (!params) return false
 
     const { email, password } = params
-    const user = await userSchema.findOne({ email }).select('+password').exec()
+    const user = await UserEntity.findOne({ email }).select('+password').exec()
     
     if (!user) return false
 

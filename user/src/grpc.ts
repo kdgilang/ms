@@ -13,8 +13,8 @@ const PROTO_PATH = resolve('./user.proto')
 
 mongoose.connect(DB_HOST)
 
-import './schemas/userSchema'
-import './schemas/userDetailSchema'
+import './entities/userEntity'
+import './entities/userDetailEntity'
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
