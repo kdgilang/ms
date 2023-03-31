@@ -20,14 +20,18 @@ import msProvider from 'src/providers/msProvider'
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errors, setError] = useState([])
 
   const submitLoginForm = async () => {
-    console.log(`test ${email}`)
-    const res = await msProvider('POST', {
-      email,
-      password,
-    })
-    console.log(res)
+    setError([])
+    try {
+      const res = await msProvider('POST', {
+        email,
+        password,
+      })
+    } catch (err) {
+      setError(err?.response?.data?.errors)
+    }
   }
 
   return (
@@ -35,6 +39,17 @@ const Login = () => {
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>
+            {errors.length ? (
+              <CCard className="p-4 mb-4 bg-danger text-high-emphasis-inverse">
+                <ul className="m-0 px-4">
+                  {errors?.map((item) => (
+                    <li key={item?.param}>{item?.msg}</li>
+                  ))}
+                </ul>
+              </CCard>
+            ) : (
+              ''
+            )}
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
@@ -70,7 +85,7 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton color="primary" type="submit" className="px-4">
                           Login
                         </CButton>
                       </CCol>
