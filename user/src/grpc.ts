@@ -3,6 +3,8 @@ const grpc = require("grpc")
 const protoLoader = require("@grpc/proto-loader")
 import mongoose from 'mongoose'
 import validateUserRepository from './repositories/validateUserRepository'
+import updateUserRepository from './repositories/updateUserRepository'
+import getUserByEmailRepository from './repositories/getUserByEmailRepository'
 import { resolve } from 'path'
 import { GRPC_HOST } from './consts/userConst'
 import { DB_HOST } from './consts/userConst'
@@ -44,74 +46,42 @@ server.addService(usersProto.UserService.service, {
   getAll: (_, callback) => {
     callback(null, { users })
   },
-  // @ts-ignore
-  get: (call, callback) => {
-    let user = users.find(n => n.id == call.request.id)
-    if (user) {
-      callback(null, user)
-    }
-    else {
-      callback({
-        code: grpc.status.NOT_FOUND,
-        details: "Not found"
-      })
-    }
-  },
-  // @ts-ignore
-  insert: (call, callback) => {
-    let user = call.request
-    user.id = ""
-    users.push(user)
-    callback(null, user)
-  },
-  // @ts-ignore
-  update: (call, callback) => {
-    let existinguser = users.find(n => n.id == call.request.id)
-    if (existinguser) {
-      existinguser.name = call.request.name
-      existinguser.age = call.request.age
-      existinguser.address = call.request.address
-      callback(null, existinguser)
-    }
-    else {
-      callback({
-        code: grpc.status.NOT_FOUND,
-        details: "Not found"
-      })
-    }
-  },
-  // @ts-ignore
-  remove: (call, callback) => {
-    let existinguserIndex = users.findIndex(n => n.id == call.request.id)
-    if (existinguserIndex != -1) {
-      users.splice(existinguserIndex, 1)
-      callback(null, {})
-    }
-    else {
-      callback({
-        code: grpc.status.NOT_FOUND,
-        details: "Not found"
-      })
-    }
-  },
+  
   // @ts-ignore
   validate: async (call, callback) => {
     try {
       const isValid = await validateUserRepository(call.request)
 
-      if (isValid) {
-        callback(null, {})
+      const response = {
+        status: isValid,
+        message: isValid ? "Success" : "Not found"
       }
-      else {
-        callback({
-          code: grpc.status.NOT_FOUND,
-          details: "Not found"
-        })
-      }
+
+      callback(null, response)
     } catch (err) {
+      callback({
+        code: grpc.status.INTERNAL,
+        details: "Internal server error"
+      })
       console.log(err)
     }
   },
+  // @ts-ignore
+  updateToken: async (call, callback) => {
+    try {
+      const { email, token } = call.request
+      const user = await getUserByEmailRepository(email)
+      user.token = token
+      await updateUserRepository(user)
+      callback(null, {})
+    } catch (err) {
+      callback({
+        code: grpc.status.INTERNAL,
+        details: "Internal server error"
+      })
+      console.log(err)
+    }
+  }
 })
 
 server.bind(GRPC_HOST, grpc.ServerCredentials.createInsecure())

@@ -2,11 +2,8 @@ syntax = "proto3";
 
 service UserService {
     rpc GetAll (Empty) returns (UserList) {}
-    rpc Get (UserRequestId) returns (User) {}
-    rpc Insert (User) returns (User) {}
-    rpc Update (User) returns (User) {}
-    rpc Remove (UserRequestId) returns (Empty) {}
-    rpc Validate (UserRequestValidate) returns (Empty) {}
+    rpc Validate (UserRequestValidate) returns (UserResPonseValidate) {}
+    rpc UpdateToken (UserRequestToken) returns (Empty) {}
 }
 
 message Empty {}
@@ -22,13 +19,14 @@ message UserList {
     repeated User Users = 1;
 }
 
-message UserRequestId {
-    string id = 1;
-}
-
 message UserRequestValidate {
     string email = 1;
     string password = 2;
+}
+
+message UserRequestToken {
+    string email = 1;
+    string token = 2;
 }
 
 message UserResPonseValidate {

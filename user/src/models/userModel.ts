@@ -7,34 +7,35 @@ export enum EStatus {
 }
 
 export interface IUserModel {
-    id: Types.ObjectId
+    _id: Types.ObjectId
     firstName: string
     lastName: string
     email: string
     avatar?: string
     password: string
-    token?: string
+    token: string
     status: EStatus
     userDetail: Types.ObjectId
 }
 
 export class UserModel implements IUserModel {
-    id: Types.ObjectId
+    _id: Types.ObjectId
     firstName: string
     lastName: string
     email: string
     avatar?: string
     password: string
-    token?: string
+    token: string
     status: EStatus
     userDetail: Types.ObjectId
     constructor() {
-        this.id = new Types.ObjectId()
+        this._id = new Types.ObjectId()
         this.firstName = ''
         this.lastName = ''
         this.email = ''
         this.password = ''
         this.status = EStatus.emailnotverified
         this.userDetail = new Types.ObjectId()
+        this.token = ''
     }
 }
